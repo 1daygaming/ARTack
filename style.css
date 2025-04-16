@@ -48,4 +48,18 @@ body {
 }
 #start-btn:hover {
   background: #1565c0;
+}
+#crosshair {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  margin-left: -16px;
+  margin-top: -16px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  z-index: 10;
+  pointer-events: none;
 } 

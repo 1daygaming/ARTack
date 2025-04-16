@@ -62,4 +62,72 @@ function placePlanet() {
   }
 
   document.getElementById('status').innerText = 'Planet placed!';
-} 
+}
+
+// --- Стрельба и снаряды ---
+let projectiles = [];
+const projectileSpeed = 2.5; // метров в секунду
+const projectileRadius = 0.05;
+
+function shootProjectile() {
+  const scene = document.querySelector('a-scene');
+  const camera = scene.camera;
+  if (!camera) return;
+
+  // Позиция камеры (в мировых координатах)
+  const camPos = new THREE.Vector3();
+  camera.getWorldPosition(camPos);
+  // Направление взгляда камеры (forward vector)
+  const camDir = new THREE.Vector3(0, 0, -1);
+  camDir.applyQuaternion(camera.quaternion);
+  camDir.normalize();
+
+  // Создаём снаряд (a-sphere)
+  const projectile = document.createElement('a-sphere');
+  projectile.setAttribute('radius', projectileRadius);
+  projectile.setAttribute('color', '#fff');
+  projectile.setAttribute('position', `${camPos.x} ${camPos.y} ${camPos.z}`);
+  projectile.setAttribute('opacity', 0.95);
+  projectile.setAttribute('shader', 'flat');
+  projectile.setAttribute('shadow', 'cast: true; receive: true');
+  scene.appendChild(projectile);
+
+  // Добавляем в массив для анимации
+  projectiles.push({
+    el: projectile,
+    pos: camPos.clone(),
+    dir: camDir.clone(),
+    alive: true
+  });
+}
+
+// --- Анимация снарядов ---
+function animateProjectiles(dt) {
+  for (const p of projectiles) {
+    if (!p.alive) continue;
+    // Двигаем снаряд
+    p.pos.addScaledVector(p.dir, projectileSpeed * dt);
+    p.el.setAttribute('position', `${p.pos.x} ${p.pos.y} ${p.pos.z}`);
+    // TODO: добавить проверки столкновений и удаления
+  }
+  // Очищаем неактивные
+  projectiles = projectiles.filter(p => p.alive);
+}
+
+// --- Обработка выстрела по тапу ---
+window.addEventListener('click', (e) => {
+  // Не стреляем, если UI перекрывает (например, кнопка)
+  if (e.target.closest('#ui')) return;
+  shootProjectile();
+});
+
+// --- Главный цикл анимации ---
+let lastTime = null;
+function gameLoop(time) {
+  if (!lastTime) lastTime = time;
+  const dt = (time - lastTime) / 1000;
+  lastTime = time;
+  animateProjectiles(dt);
+  requestAnimationFrame(gameLoop);
+}
+requestAnimationFrame(gameLoop); 
