@@ -90,11 +90,8 @@ function shootProjectile() {
   projectile.setAttribute('opacity', 0.95);
   projectile.setAttribute('shader', 'flat');
   projectile.setAttribute('shadow', 'cast: true; receive: true');
+  projectile.setAttribute('position', `${camPos.x} ${camPos.y} ${camPos.z}`);
   scene.appendChild(projectile);
-
-  projectile.addEventListener('loaded', () => {
-    projectile.object3D.position.copy(camPos);
-  });
 
   projectiles.push({
     el: projectile,
