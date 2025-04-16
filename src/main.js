@@ -74,18 +74,14 @@ function shootProjectile() {
   const cameraEntity = scene.querySelector('[camera]');
   if (!cameraEntity || !cameraEntity.object3D) return;
 
-  // Получаем THREE.Camera из object3D
-  const threeCamera = cameraEntity.getObject3D('camera');
-  if (!threeCamera) return;
-
   // Позиция камеры (в мировых координатах)
   const camPos = new THREE.Vector3();
   cameraEntity.object3D.getWorldPosition(camPos);
 
-  // Получаем направление через центр экрана (raycaster)
-  const raycaster = new THREE.Raycaster();
-  raycaster.setFromCamera({x: 0, y: 0}, threeCamera);
-  const camDir = raycaster.ray.direction.clone().normalize();
+  // Направление взгляда камеры (forward vector в мировых координатах)
+  const camDir = new THREE.Vector3();
+  cameraEntity.object3D.getWorldDirection(camDir);
+  camDir.normalize();
 
   // Создаём снаряд (a-sphere) в <a-scene>
   const projectile = document.createElement('a-sphere');
