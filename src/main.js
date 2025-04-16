@@ -71,18 +71,19 @@ const projectileRadius = 0.05;
 
 function shootProjectile() {
   const scene = document.querySelector('a-scene');
-  const camera = scene.camera;
-  if (!camera) return;
+  // Получаем объект камеры через <a-entity camera>
+  const cameraEntity = scene.querySelector('[camera]');
+  if (!cameraEntity || !cameraEntity.object3D) return;
 
   // Позиция камеры (в мировых координатах)
   const camPos = new THREE.Vector3();
-  camera.getWorldPosition(camPos);
+  cameraEntity.object3D.getWorldPosition(camPos);
   // Направление взгляда камеры (forward vector)
   const camDir = new THREE.Vector3(0, 0, -1);
-  camDir.applyQuaternion(camera.quaternion);
+  camDir.applyQuaternion(cameraEntity.object3D.getWorldQuaternion(new THREE.Quaternion()));
   camDir.normalize();
 
-  // Создаём снаряд (a-sphere)
+  // Создаём снаряд (a-sphere) в <a-scene> (НЕ в маркере!)
   const projectile = document.createElement('a-sphere');
   projectile.setAttribute('radius', projectileRadius);
   projectile.setAttribute('color', '#fff');
