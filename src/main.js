@@ -19,25 +19,24 @@ window.onload = () => {
 };
 
 function placePlanet() {
-  // Получаем контейнер для Three.js
   const container = document.querySelector('#threejs-container');
 
-  // Создаём объект A-Frame для планеты (сфера)
+  // Сфера в центре маркера
   const planet = document.createElement('a-sphere');
   planet.setAttribute('radius', 0.5);
   planet.setAttribute('color', '#3cf');
-  planet.setAttribute('position', '0 0 -2'); // 2 метра перед камерой
+  planet.setAttribute('position', '0 0 0');
   planet.setAttribute('shadow', 'cast: true; receive: true');
   container.appendChild(planet);
 
-  // Добавим базы (кубы) по экватору
+  // Базы по кругу вокруг центра маркера
   const baseCount = 4;
   const baseRadius = 0.6;
   for (let i = 0; i < baseCount; i++) {
     const angle = (i / baseCount) * Math.PI * 2;
     const x = Math.cos(angle) * baseRadius;
     const y = 0;
-    const z = Math.sin(angle) * baseRadius - 2;
+    const z = Math.sin(angle) * baseRadius;
     const base = document.createElement('a-box');
     base.setAttribute('width', 0.15);
     base.setAttribute('height', 0.1);
