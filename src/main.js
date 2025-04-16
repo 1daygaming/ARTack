@@ -71,7 +71,6 @@ const projectileRadius = 0.05;
 
 function shootProjectile() {
   const scene = document.querySelector('a-scene');
-  // Получаем объект камеры через <a-entity camera>
   const cameraEntity = scene.querySelector('[camera]');
   if (!cameraEntity || !cameraEntity.object3D) return;
 
@@ -83,15 +82,19 @@ function shootProjectile() {
   camDir.applyQuaternion(cameraEntity.object3D.getWorldQuaternion(new THREE.Quaternion()));
   camDir.normalize();
 
-  // Создаём снаряд (a-sphere) в <a-scene> (НЕ в маркере!)
+  // Создаём снаряд (a-sphere) в <a-scene>
   const projectile = document.createElement('a-sphere');
   projectile.setAttribute('radius', projectileRadius);
   projectile.setAttribute('color', '#fff');
-  projectile.setAttribute('position', `${camPos.x} ${camPos.y} ${camPos.z}`);
   projectile.setAttribute('opacity', 0.95);
   projectile.setAttribute('shader', 'flat');
   projectile.setAttribute('shadow', 'cast: true; receive: true');
   scene.appendChild(projectile);
+
+  // Ждём, когда объект будет добавлен в сцену и object3D будет доступен
+  projectile.addEventListener('loaded', () => {
+    projectile.object3D.position.copy(camPos);
+  });
 
   // Добавляем в массив для анимации
   projectiles.push({
@@ -106,12 +109,12 @@ function shootProjectile() {
 function animateProjectiles(dt) {
   for (const p of projectiles) {
     if (!p.alive) continue;
-    // Двигаем снаряд
     p.pos.addScaledVector(p.dir, projectileSpeed * dt);
-    p.el.setAttribute('position', `${p.pos.x} ${p.pos.y} ${p.pos.z}`);
-    // TODO: добавить проверки столкновений и удаления
+    // Обновляем позицию через object3D
+    if (p.el.object3D) {
+      p.el.object3D.position.copy(p.pos);
+    }
   }
-  // Очищаем неактивные
   projectiles = projectiles.filter(p => p.alive);
 }
 
