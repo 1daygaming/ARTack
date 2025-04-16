@@ -30,42 +30,23 @@ function placePlanet() {
   planet.setAttribute('shadow', 'cast: true; receive: true');
   container.appendChild(planet);
 
-  // Базы по верхней полусфере
+  // Базы по верхней полусфере (одна широта, равномерно по окружности)
   const baseCount = 4;
-  const baseRadius = planetRadius; // базы на поверхности сферы
+  const baseRadius = planetRadius;
   const baseHeight = 0.1;
+  const theta = Math.PI / 4; // фиксированная широта (45°)
   for (let i = 0; i < baseCount; i++) {
-    // Угол theta от 0 до pi/2 (верхняя полусфера)
-    const theta = Math.PI / 4 + (i / (baseCount - 1)) * (Math.PI / 2); // равномерно по дуге сверху
-    const phi = (i / baseCount) * 2 * Math.PI; // равномерно по окружности
-    // Координаты центра базы на поверхности сферы
+    const phi = (i / baseCount) * 2 * Math.PI;
     const x = baseRadius * Math.sin(theta) * Math.cos(phi);
     const y = baseRadius * Math.cos(theta);
     const z = baseRadius * Math.sin(theta) * Math.sin(phi);
-    // Нормаль (вектор из центра сферы в точку базы)
     const nx = x;
     const ny = y;
     const nz = z;
-    // Смещаем базу вдоль нормали на половину высоты базы
     const norm = Math.sqrt(nx*nx + ny*ny + nz*nz);
     const bx = x + (nx / norm) * (baseHeight / 2);
     const by = y + (ny / norm) * (baseHeight / 2);
     const bz = z + (nz / norm) * (baseHeight / 2);
-    // Вычисляем rotation (A-Frame: x y z в градусах)
-    // Воспользуемся методом look-at: пусть база "смотрит" из центра сферы в свою позицию
-    // Получим вектор нормали и переведём в rotation
-    const up = [0, 1, 0];
-    const normal = [nx / norm, ny / norm, nz / norm];
-    // Получаем угол между up и normal
-    const dot = up[0]*normal[0] + up[1]*normal[1] + up[2]*normal[2];
-    const angle = Math.acos(dot);
-    // Ось вращения — векторное произведение up и normal
-    const rx = up[1]*normal[2] - up[2]*normal[1];
-    const ry = up[2]*normal[0] - up[0]*normal[2];
-    const rz = up[0]*normal[1] - up[1]*normal[0];
-    // Преобразуем в rotation для A-Frame (в градусах)
-    // Для простоты используем только вращение вокруг оси X и Z (Y не нужен для симметрии)
-    // Можно использовать библиотеку, но здесь вручную:
     const rotX = -THREE.MathUtils.radToDeg(theta - Math.PI/2);
     const rotY = THREE.MathUtils.radToDeg(phi);
     const rotZ = 0;
