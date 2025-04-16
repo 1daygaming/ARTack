@@ -1,0 +1,21 @@
+{
+  "name": "artack-ar-game",
+  "version": "1.0.0",
+  "description": "AR-Tack! — AR-игра на 8th Wall и Three.js, развёртываемая через Github Pages.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "npx serve .",
+    "predeploy": "echo 'skip build'",
+    "deploy": "gh-pages -d ."
+  },
+  "homepage": "https://yourusername.github.io/ARTack!",
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^6.0.0",
+    "serve": "^14.2.0"
+  },
+  "dependencies": {
+    "three": "^0.152.2"
+  }
+}
