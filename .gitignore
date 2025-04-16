@@ -1,0 +1,25 @@
+# Node.js
+node_modules/
+
+# Yarn
+.yarn/
+.yarnrc.yml
+yarn-error.log
+yarn-debug.log*
+
+# MacOS
+.DS_Store
+
+# 8th Wall (если будут локальные ключи)
+.env
+
+# gh-pages
+.gh-pages/
+
+dist/
+build/
+
+# Project management and rules
+.cursor/
+goal.mdc
+tasks.mdc 
