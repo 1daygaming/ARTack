@@ -7,19 +7,19 @@ window.onload = () => {
   const status = document.getElementById('status');
   status.innerText = 'Waiting for AR...';
 
-  // Ждём, когда сцена AR.js будет готова
-  document.querySelector('a-scene').addEventListener('loaded', () => {
-    status.innerText = 'Tap Start to place the planet!';
+  const marker = document.querySelector('a-marker');
+  marker.addEventListener('markerFound', () => {
+    status.innerText = 'Marker found! Tap Start to place the planet!';
+    document.getElementById('start-btn').onclick = () => {
+      status.innerText = 'Placing planet...';
+      placePlanet();
+    };
   });
-
-  document.getElementById('start-btn').onclick = () => {
-    status.innerText = 'Placing planet...';
-    placePlanet();
-  };
 };
 
 function placePlanet() {
   const container = document.querySelector('#threejs-container');
+  container.innerHTML = '';
 
   // Сфера в центре маркера
   const planet = document.createElement('a-sphere');
