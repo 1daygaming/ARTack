@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AR-Tack! — AR Game on 8th Wall & Three.js</title>
-  <!-- 8th Wall WebAR library -->
-  <script async src="https://apps.8thwall.com/xrweb?appKey=YOUR_APP_KEY_HERE"></script>
+  <title>AR-Tack! — AR Game on AR.js & Three.js</title>
+  <!-- AR.js (markerless, location-based) -->
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar-nft.js"></script>
   <!-- Three.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
-  <div id="ar-container"></div>
+<body style="margin: 0; overflow: hidden;">
   <div id="ui">
     <h1>AR-Tack!</h1>
     <div id="status"></div>
     <button id="start-btn">Start Game</button>
   </div>
+  <!-- AR.js scene -->
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+    <!-- Контейнер для объектов Three.js будет добавлен через main.js -->
+    <a-entity id="threejs-container"></a-entity>
+    <a-entity camera></a-entity>
+  </a-scene>
   <script type="module" src="src/main.js"></script>
 </body>
 </html> 
